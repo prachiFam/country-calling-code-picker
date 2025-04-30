@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:country_calling_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 
 import './country.dart';
 
@@ -12,24 +11,6 @@ Future<List<Country>> getCountries(BuildContext context) async {
       'packages/country_calling_code_picker/raw/country_codes.json');
   final parsed = json.decode(rawData.toString()).cast<Map<String, dynamic>>();
   return parsed.map<Country>((json) => new Country.fromJson(json)).toList();
-}
-
-///This function returns an user's current country. User's sim country code is matched with the ones in the list.
-///If there is no sim in the device, first country in the list will be returned.
-///This function returns an user's current country. User's sim country code is matched with the ones in the list.
-///If there is no sim in the device, first country in the list will be returned.
-Future<Country> getDefaultCountry(BuildContext context) async {
-  final list = await getCountries(context);
-  try {
-    final countryCode = await FlutterSimCountryCode.simCountryCode;
-    if (countryCode == null) {
-      return list.first;
-    }
-    return list.firstWhere((element) =>
-        element.countryCode.toLowerCase() == countryCode.toLowerCase());
-  } catch (e) {
-    return list.first;
-  }
 }
 
 ///This function returns an country whose [countryCode] matches with the passed one.
